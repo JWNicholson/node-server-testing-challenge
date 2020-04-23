@@ -1,19 +1,19 @@
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
+const express = require("express");
+const helmet = require("helmet");
+const cors = require("cors");
 
-const userRouter = require('../routs/users-router');
+const userRouter = require("../router/users-router.js");
 
 const server = express();
 
 server.use(helmet());
-server.use(express());
+server.use(express.json());
 server.use(cors());
 
-server.use('./api/users', userRouter);
+server.use("/api/users", userRouter);
 
-server.get('/', (res,req) => {
-    res.statusCode(200).json({api: "xxx server running xxx"});
-})
+server.get("/", (res, req) => {
+    res.status(200).json({ api: "server running"});
+});
 
 module.exports = server;

@@ -1,16 +1,15 @@
-const request = require('supertest');
-const server = require('./server');
-const db = require('../data/dbConfig');
-
+const request = require("supertest");
+const server = require("./server.js");
+const db = require("../data/dbConfig.js");
 
 describe("server", () => {
     test("runs the tests", () => {
-        expect(true).toBe(true);
-    })
+    expect(true).toBe(true);
+    });
 });
 
 describe("POST to /api/users", () => {
-    test("returns status 201 CREATED", () => {
+    test("returns status 201", () => {
         console.log(process.env.DATABASE_ENV)
         return request(server)
             .post("/api/users")
@@ -27,7 +26,37 @@ describe("POST to /api/users", () => {
                 expect(res.type).toMatch(/json/);
         });
     });
-
-
 });
 
+
+describe("DELETE to /api/users", () => {
+    beforeEach(async () => {
+        await db("users").truncate();
+    });
+
+    test("returns status 200 OK", () => {
+        return request(server)
+            .post("/api/users") 
+            .send({ name: "delete name" })
+            .then(res => {
+                return request(server)
+                    .delete(`/api/users/${res.id}`)
+                    .then(res => {
+                        expect(res.status).toBe(200);
+                });
+            });
+    });
+
+    test("returns message successful", () => {
+        return request(server)
+            .post("/api/users") 
+            .send({ name: "delete name" })
+            .then(res => {
+                return request(server)
+                    .delete(`/api/users/${res.id}`)
+                    .then(res => {
+                        expect(res.body.message).toBe("User deleted.");
+                });
+            });
+    });
+});
