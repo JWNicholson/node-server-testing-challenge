@@ -15,7 +15,7 @@ router.post("/", (req, res) => {
                 res.status(500).json({errorMessage: "Could not add user."})
             })
     } else {
-        res.status(400).json({errorMessage: "Must put in name to add a user."})
+        res.status(400).json({errorMessage: "Must input name to create a user."})
     }
 });
 
